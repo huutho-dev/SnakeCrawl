@@ -2,7 +2,6 @@ package com.huutho.snakecrawl;
 
 import android.content.Context;
 import android.os.Handler;
-import android.view.View;
 
 import java.util.Random;
 
@@ -11,76 +10,199 @@ import java.util.Random;
  */
 
 public class SnakeManager {
-    private final int TIME_MOVE = 13;
-    private final int DISTANCE_MOVE = 3;
-
-    private Random mRandom;
-    private Handler mHandler;
-    private Runnable runnable;
-    private View mView;
-
-    private int widthView;
-    private int heightView;
+    private final int TIME_MOVE = 3;
+    private final int DISTANCE_MOVE = 2;
 
     private int widthScreen;
     private int heightScreen;
 
-    public SnakeManager(Context context, View view) {
+    private Random mRandom;
+    private Handler mHandler;
+    private Runnable runnable;
+    private SnakeWindowManager mSnakeWindowManager;
 
-        this.mView = view;
-        this.widthView = view.getWidth();
-        this.heightView = view.getHeight();
-        this.widthView = Utils.getWidthScreen(context);
+
+    public SnakeManager(Context context) {
+        this.mSnakeWindowManager = new SnakeWindowManager(context);
+        this.widthScreen = Utils.getWidthScreen(context);
         this.heightScreen = Utils.getHeightScreen(context);
+        this.mRandom = new Random();
+        this.mHandler = new Handler();
 
-        mRandom = new Random();
-        mHandler = new Handler();
-    }
 
-    public void moveHorizontalToLeft() {
-        mView.setX(widthView/2);
-        mView.setY(randomHeight());
-        removeHandler();
-
-        runnable = new Runnable() {
+        final Handler handler = new Handler();
+        Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                float newX = mView.getX() + DISTANCE_MOVE;
-                mView.setX(newX);
-                mHandler.postDelayed(runnable, TIME_MOVE);
+                runSnake();
+                handler.postDelayed(this, 20000);
             }
         };
-
-        postHandler(runnable);
-    }
-
-    public void moveHorizontalToRight() {
+        handler.post(runnable);
 
     }
 
-    public void moveVertical() {
-
-    }
-
-    public void moveCross() {
-
-    }
-
-    private void removeHandler() {
-        if (mHandler != null) {
-            mHandler.removeCallbacks(runnable);
+    public void runSnake() {
+        int run = mRandom.nextInt(4);
+        switch (run) {
+            case 0:
+                moveToLeft();
+                break;
+            case 1:
+                moveToRight();
+                break;
+            case 2:
+                moveToTop();
+                break;
+            case 3:
+                moveToBottom();
+                break;
         }
     }
 
-    private void postHandler(Runnable runnable) {
+
+    private void moveToRight() {
+        mHandler.removeCallbacks(runnable);
+        runnable = null;
+        rotateRight();
+        setPositionOnLeft();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSnakeWindowManager.getLayoutParams().x += DISTANCE_MOVE;
+
+                if (mSnakeWindowManager.getLayoutParams().x > widthScreen) {
+                    mHandler.removeCallbacks(runnable);
+                }
+
+                mSnakeWindowManager.updateSnakeLayout();
+                mHandler.postDelayed(runnable, TIME_MOVE);
+
+            }
+        };
         mHandler.post(runnable);
     }
 
-    private int randomHeight() {
-        return mRandom.nextInt(heightScreen);
+    private void moveToLeft() {
+        mHandler.removeCallbacks(runnable);
+        runnable = null;
+        rotateDefaultLeft();
+        setPositionOnRight();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSnakeWindowManager.getLayoutParams().x -= DISTANCE_MOVE;
+
+                if (mSnakeWindowManager.getLayoutParams().x < 0) {
+                    mHandler.removeCallbacks(runnable);
+                }
+
+                mSnakeWindowManager.updateSnakeLayout();
+                mHandler.postDelayed(runnable, TIME_MOVE);
+            }
+        };
+        mHandler.post(runnable);
     }
 
-    private int randomWidth() {
-        return mRandom.nextInt(widthScreen);
+    private void moveToTop() {
+        mHandler.removeCallbacks(runnable);
+        runnable = null;
+        rotateTop();
+        setPositionOnBottom();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSnakeWindowManager.getLayoutParams().y -= DISTANCE_MOVE;
+
+                if (mSnakeWindowManager.getLayoutParams().y < 0) {
+                    mHandler.removeCallbacks(runnable);
+                }
+
+                mSnakeWindowManager.updateSnakeLayout();
+                mHandler.postDelayed(runnable, TIME_MOVE);
+            }
+        };
+        mHandler.post(runnable);
     }
+
+    private void moveToBottom() {
+        mHandler.removeCallbacks(runnable);
+        runnable = null;
+        rotateBottom();
+        setPositionOnTop();
+        runnable = new Runnable() {
+            @Override
+            public void run() {
+                mSnakeWindowManager.getLayoutParams().y += DISTANCE_MOVE;
+
+                if (mSnakeWindowManager.getLayoutParams().y > heightScreen) {
+                    mHandler.removeCallbacks(runnable);
+                }
+
+                mSnakeWindowManager.updateSnakeLayout();
+                mHandler.postDelayed(runnable, TIME_MOVE);
+            }
+        };
+        mHandler.post(runnable);
+    }
+
+
+    private void setPositionOnLeft() {
+        mSnakeWindowManager.getView().post(new Runnable() {
+            @Override
+            public void run() {
+                int x = 0 - mSnakeWindowManager.getView().getWidth();
+                int y = mRandom.nextInt(heightScreen) - mSnakeWindowManager.getView().getHeight() / 2;
+                mSnakeWindowManager.updateSnakeLayout(x, y);
+            }
+        });
+    }
+
+    private void setPositionOnRight() {
+        int x = widthScreen;
+        int y = mRandom.nextInt(heightScreen) - mSnakeWindowManager.getView().getHeight() / 2;
+        mSnakeWindowManager.updateSnakeLayout(x, y);
+    }
+
+    private void setPositionOnTop() {
+        mSnakeWindowManager.getView().post(new Runnable() {
+            @Override
+            public void run() {
+                int x = mRandom.nextInt(widthScreen) - mSnakeWindowManager.getView().getWidth() / 2;
+                int y = 0 - mSnakeWindowManager.getView().getHeight();
+                mSnakeWindowManager.updateSnakeLayout(x, y);
+            }
+        });
+    }
+
+    private void setPositionOnBottom() {
+        int x = mRandom.nextInt(widthScreen) - mSnakeWindowManager.getView().getWidth() / 2;
+        int y = heightScreen;
+        mSnakeWindowManager.updateSnakeLayout(x, y);
+    }
+
+
+    // setRotation : rotate view
+    // setRotationY: flip image inside View
+    private void rotateDefaultLeft() {
+        mSnakeWindowManager.getView().setRotation(0);
+        mSnakeWindowManager.getView().setRotationY(0);
+    }
+
+    private void rotateRight() {
+        mSnakeWindowManager.getView().setRotation(0);
+        mSnakeWindowManager.getView().setRotationY(180);
+    }
+
+    private void rotateTop() {
+        mSnakeWindowManager.getView().setRotation(90);
+        mSnakeWindowManager.getView().setRotationY(0);
+    }
+
+    private void rotateBottom() {
+        mSnakeWindowManager.getView().setRotation(-90);
+        mSnakeWindowManager.getView().setRotationY(0);
+    }
+
+
 }
