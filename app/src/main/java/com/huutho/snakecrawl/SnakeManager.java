@@ -10,15 +10,15 @@ import java.util.Random;
  */
 
 public class SnakeManager {
-    private final int TIME_MOVE = 3;
-    private final int DISTANCE_MOVE = 2;
+    private final int TIME_MOVE = 5;
+    private final int DISTANCE_MOVE =2;
 
     private int widthScreen;
     private int heightScreen;
 
     private Random mRandom;
     private Handler mHandler;
-    private Runnable runnable;
+    private Runnable mRunnable;
     private SnakeWindowManager mSnakeWindowManager;
 
 
@@ -31,11 +31,13 @@ public class SnakeManager {
 
 
         final Handler handler = new Handler();
-        Runnable runnable = new Runnable() {
+        final Runnable runnable = new Runnable() {
             @Override
             public void run() {
-                runSnake();
-                handler.postDelayed(this, 20000);
+                if (mRunnable == null) {
+                    runSnake();
+                }
+                handler.postDelayed(this, 3000);
             }
         };
         handler.post(runnable);
@@ -62,88 +64,92 @@ public class SnakeManager {
 
 
     private void moveToRight() {
-        mHandler.removeCallbacks(runnable);
-        runnable = null;
+        mHandler.removeCallbacks(mRunnable);
+        mRunnable = null;
         rotateRight();
         setPositionOnLeft();
-        runnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 mSnakeWindowManager.getLayoutParams().x += DISTANCE_MOVE;
 
                 if (mSnakeWindowManager.getLayoutParams().x > widthScreen) {
-                    mHandler.removeCallbacks(runnable);
+                    mHandler.removeCallbacks(mRunnable);
+                    mRunnable = null;
                 }
 
                 mSnakeWindowManager.updateSnakeLayout();
-                mHandler.postDelayed(runnable, TIME_MOVE);
+                mHandler.postDelayed(mRunnable, TIME_MOVE);
 
             }
         };
-        mHandler.post(runnable);
+        mHandler.post(mRunnable);
     }
 
     private void moveToLeft() {
-        mHandler.removeCallbacks(runnable);
-        runnable = null;
+        mHandler.removeCallbacks(mRunnable);
+        mRunnable = null;
         rotateDefaultLeft();
         setPositionOnRight();
-        runnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 mSnakeWindowManager.getLayoutParams().x -= DISTANCE_MOVE;
 
-                if (mSnakeWindowManager.getLayoutParams().x < 0) {
-                    mHandler.removeCallbacks(runnable);
+                if (mSnakeWindowManager.getLayoutParams().x < 0 - mSnakeWindowManager.getView().getWidth()) {
+                    mHandler.removeCallbacks(mRunnable);
+                    mRunnable = null;
                 }
 
                 mSnakeWindowManager.updateSnakeLayout();
-                mHandler.postDelayed(runnable, TIME_MOVE);
+                mHandler.postDelayed(mRunnable, TIME_MOVE);
             }
         };
-        mHandler.post(runnable);
+        mHandler.post(mRunnable);
     }
 
     private void moveToTop() {
-        mHandler.removeCallbacks(runnable);
-        runnable = null;
+        mHandler.removeCallbacks(mRunnable);
+        mRunnable = null;
         rotateTop();
         setPositionOnBottom();
-        runnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 mSnakeWindowManager.getLayoutParams().y -= DISTANCE_MOVE;
 
-                if (mSnakeWindowManager.getLayoutParams().y < 0) {
-                    mHandler.removeCallbacks(runnable);
+                if (mSnakeWindowManager.getLayoutParams().y < 0 - mSnakeWindowManager.getView().getHeight()) {
+                    mHandler.removeCallbacks(mRunnable);
+                    mRunnable = null;
                 }
 
                 mSnakeWindowManager.updateSnakeLayout();
-                mHandler.postDelayed(runnable, TIME_MOVE);
+                mHandler.postDelayed(mRunnable, TIME_MOVE);
             }
         };
-        mHandler.post(runnable);
+        mHandler.post(mRunnable);
     }
 
     private void moveToBottom() {
-        mHandler.removeCallbacks(runnable);
-        runnable = null;
+        mHandler.removeCallbacks(mRunnable);
+        mRunnable = null;
         rotateBottom();
         setPositionOnTop();
-        runnable = new Runnable() {
+        mRunnable = new Runnable() {
             @Override
             public void run() {
                 mSnakeWindowManager.getLayoutParams().y += DISTANCE_MOVE;
 
                 if (mSnakeWindowManager.getLayoutParams().y > heightScreen) {
-                    mHandler.removeCallbacks(runnable);
+                    mHandler.removeCallbacks(mRunnable);
+                    mRunnable = null;
                 }
 
                 mSnakeWindowManager.updateSnakeLayout();
-                mHandler.postDelayed(runnable, TIME_MOVE);
+                mHandler.postDelayed(mRunnable, TIME_MOVE);
             }
         };
-        mHandler.post(runnable);
+        mHandler.post(mRunnable);
     }
 
 
