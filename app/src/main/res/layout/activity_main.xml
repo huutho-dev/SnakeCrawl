@@ -2,12 +2,45 @@
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@drawable/background"
+    android:orientation="vertical">
 
     <ImageView
-        android:scaleType="fitXY"
-        android:id="@+id/image"
-        android:layout_width="350dp"
-        android:layout_height="200dp"/>
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_above="@+id/btn_advice"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="34dp"
+        android:src="@drawable/ic_title"/>
+
+    <Button
+        style="@style/ButtonMain"
+        android:id="@+id/btn_start"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="249dp"
+        android:background="@drawable/round_button"
+        android:text="Bắt đầu"
+      />
+
+    <Button
+        style="@style/ButtonMain"
+        android:id="@+id/btn_advice"
+        android:layout_alignLeft="@+id/btn_start"
+        android:layout_alignStart="@+id/btn_start"
+        android:layout_below="@+id/btn_start"
+        android:text="Lời khuyên"
+       />
+
+    <Button
+        android:id="@+id/btn_feed_back"
+        style="@style/ButtonMain"
+        android:layout_alignLeft="@+id/btn_advice"
+        android:layout_alignStart="@+id/btn_advice"
+        android:layout_below="@+id/btn_advice"
+        android:text="Góp ý"
+        />
 
 </RelativeLayout>

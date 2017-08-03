@@ -1,7 +1,90 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:layout_height="match_parent">
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/background"
+                android:orientation="vertical">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/img_back"
+        android:layout_width="32dp"
+        android:layout_height="32dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:layout_marginLeft="16dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginTop="8dp"
+        android:background="@drawable/round_button_back"
+        android:padding="8dp"
+        android:src="@drawable/ic_keyboard_arrow_left"/>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_marginBottom="72dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:layout_marginTop="72dp"
+        android:background="@drawable/background_advice">
+
+        <TextView
+            android:fontFamily="monospace"
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true"
+            android:layout_marginTop="30dp"
+            android:padding="16dp"
+            android:text="Làm thế nào để prank bạn bè của ban?"
+            android:textColor="#e1c529"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:fontFamily="monospace"
+            android:id="@+id/textView5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="66dp"
+            android:padding="16dp"
+            android:text="Đặt thời gian xuất hiện và đưa điện thoại cho bạn bè của bạn.\nBạn của bạn sẽ la hét sau khi con rắn xuất hiện"
+            android:textColor="@color/white"
+            android:textSize="14sp"
+            android:layout_alignTop="@+id/textView3"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"/>
+
+
+        <TextView
+            android:fontFamily="monospace"
+            android:id="@+id/textView4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_below="@+id/textView5"
+            android:layout_marginTop="28dp"
+            android:padding="16dp"
+            android:text="Làm thế nào để prank bạn bè của ban?"
+            android:textColor="#e1c529"
+            android:textSize="22sp"/>
+
+        <TextView
+            android:fontFamily="monospace"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:layout_marginBottom="62dp"
+            android:padding="16dp"
+            android:text="Loại bỏ rắn bằng cách nhấp vào biểu tượng thông bao hoặc ứng dụng"
+            android:textColor="@color/white"
+            android:textSize="14sp"/>
+
+    </RelativeLayout>
+</RelativeLayout>
